@@ -104,9 +104,9 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
     
     n_neighbors = neigh.kneighbors([test_feat], n_neighbors=len(genre_data), return_distance=False)[0]
     
+
     #artists_id = exploded_track_df['artists_id']
-    artists_id = genre_data.iloc[n_neighbors]['artists_id'].to_numpy()
-    artists_name_lower = genre_data.iloc[n_neighbors]['artists_name_lower'].to_numpy()
+    artists_id = genre_data.iloc[n_neighbors]['artists_id'].to_numpy()    
     artists_name = genre_data.iloc[n_neighbors]['artists_name'].to_numpy()
     artist_info = [genre_data.iloc[n_neighbors]['artists_id'].to_numpy(), genre_data.iloc[n_neighbors]['artists_name'].to_numpy()]
     uris = genre_data.iloc[n_neighbors]["uri"].tolist()
@@ -114,14 +114,16 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
     print('Artists set before removing the given artist from the list: ', len(artists_id), len(artists_name))
     #print(artists_name_lower)
 
-    indices_to_remove = np.where(artists_name_lower == artist_select)
-    uris = np.delete(uris, indices_to_remove)
-    audios = np.delete(audios, indices_to_remove)
-    artists_id = np.delete(artists_id, indices_to_remove)
-    artists_name = np.delete(artists_name, indices_to_remove)
-    artist_info = np.delete(artist_info, indices_to_remove)
+    if(len(artist_select) > 0):
+        artists_name_lower = genre_data.iloc[n_neighbors]['artists_name_lower'].to_numpy()
+        indices_to_remove = np.where(artists_name_lower == artist_select)
+        uris = np.delete(uris, indices_to_remove)
+        audios = np.delete(audios, indices_to_remove)
+        artists_id = np.delete(artists_id, indices_to_remove)
+        artists_name = np.delete(artists_name, indices_to_remove)
+        artist_info = np.delete(artist_info, indices_to_remove)
+        print('After remove ', len(artists_id), len(artists_name))
 
-    print('After remove ', len(artists_id), len(artists_name))
     return uris, audios, artists_id, artists_name, artist_info
 
 
