@@ -81,8 +81,6 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
     if(len(artist_select) > 0):
         print('The artist given: ', artist_select)
         print('The found in csv files: ')
-        #print(filtered_df)
-        #print('GENRES ', filtered_df.genres)
         genre = find_highest_duplicate(filtered_df.genres)
         #genre_new = str(genre_new)[2:-2]
         #get the genre string value
@@ -104,8 +102,7 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
     
     n_neighbors = neigh.kneighbors([test_feat], n_neighbors=len(genre_data), return_distance=False)[0]
     
-
-    #artists_id = exploded_track_df['artists_id']
+    #Search nearest neighbor
     artists_id = genre_data.iloc[n_neighbors]['artists_id'].to_numpy()    
     artists_name = genre_data.iloc[n_neighbors]['artists_name'].to_numpy()
     artist_info = [genre_data.iloc[n_neighbors]['artists_id'].to_numpy(), genre_data.iloc[n_neighbors]['artists_name'].to_numpy()]
@@ -122,7 +119,7 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
         artists_id = np.delete(artists_id, indices_to_remove)
         artists_name = np.delete(artists_name, indices_to_remove)
         artist_info = np.delete(artist_info, indices_to_remove)
-        print('After remove ', len(artists_id), len(artists_name))
+        print('After remove the entries from the list: ', len(artists_id), len(artists_name))
 
     return uris, audios, artists_id, artists_name, artist_info
 
@@ -162,7 +159,6 @@ def main():
         call_container(exploded_track_df, filtered_df, name)
     else:
         exploded_track_df, filtered_df = load_data(name)    
-        #print('XXXXX ' , filtered_df)
         call_container(exploded_track_df, filtered_df, name)
 
 def call_container(exploded_track_df, filtered_df, name):
@@ -193,10 +189,7 @@ def call_container(exploded_track_df, filtered_df, name):
     artists = []
     artist_ids = []
     artists_info = []
-    #print(len(uris))
-    #print(len(artists_name))
     for uri in uris:
-        #print(uri)
         track = """<iframe src="https://open.spotify.com/embed/track/{}" width="260" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
         artist = artists_name
         id = artists_id
@@ -205,8 +198,7 @@ def call_container(exploded_track_df, filtered_df, name):
         artists.append(artist)
         artist_ids.append(id)
         artists_info.append(info)
-        #print(audios)
-
+  
     # Add "Recommend More Songs" button to have more options
     
     ## Use Streamlit's session_state to check if users alter any inputs between sessions
@@ -244,24 +236,14 @@ def call_container(exploded_track_df, filtered_df, name):
     current_artists = artists[st.session_state['start_track_i']: st.session_state['start_track_i'] + tracks_per_page]
     current_artist_ids = artist_ids[st.session_state['start_track_i']: st.session_state['start_track_i'] + tracks_per_page]
     current_artist_info = artists_info[st.session_state['start_track_i']: st.session_state['start_track_i'] + tracks_per_page]
-    #print(info[0], info[1])
-    #print(track)
-    #print(current_artist_ids)
-    list_artists = list(dict.fromkeys(artist))
-    list_artist_ids = list(dict.fromkeys(id))
-    list_artist_info = list(dict.fromkeys(info[0])), list(dict.fromkeys(info[1]))
-    #print(list_artist_info)
+  
     l_artists = []
     l_artists_id = []
     for i, (track, audio, artist, artist_id) in enumerate(zip(current_tracks, current_audios, current_artists, current_artist_ids)):
-        #print(track, artist[i], artist_id[i])
         l_artists.append(artist[i])
         l_artists_id.append(artist_id[i])
 
-        #print(list(set(artist)))
         if i % 3 == 0:
-            #print(track)
-            #print(list_artists)
             with col1:
                 components.html(
                     track, 
@@ -282,35 +264,17 @@ def call_container(exploded_track_df, filtered_df, name):
                     track,
                     height=400,
                 )
-    #list_artists  
-    #list_artist_ids 
-    #artist_info = dict(zip(list_artists, list_artist_ids))
-    #artist_info 
+   
     
     list_artists = list(dict.fromkeys(l_artists))
     list_artist_ids = list(dict.fromkeys(l_artists_id))
-    #print(list_artists)
-    #print(list_artist_ids)
-#    artist_info = dict(zip(list_artists, list_artist_ids))
-#    artist_info_2 = (list_artists, list_artist_ids)
-#    print(artist_info_2[0])
-
-#    with st.container():
-#        with col1:
-#            for key, value in artist_info.items():
-#                hyperlink_format = """<a href="https://open.spotify.com/artist/{}" width="260" height="20" target="_blank">{}</a>""".format(value, key)
-#                components.html(hyperlink_format)
 
     heading =  'Search Artist Info'
     st.write(heading)
     
-    #combined_list = list(zip(list_artists, list_artist_ids))
     combined_list = [[list_artists[i], list_artist_ids[i]] for i in range(len(list_artists))]
 
-    #print(combined_list)
-
     for j in combined_list:
-        #j[1] = """<a href="https://open.spotify.com/artist/{}" width="260" height="20" target="_blank">{}</a>""".format(j[1], j[0]) 
         j[1] = 'https://open.spotify.com/artist/{}'.format(j[1])
         print(j[1])
     
