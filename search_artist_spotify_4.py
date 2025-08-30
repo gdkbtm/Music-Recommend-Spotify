@@ -133,11 +133,18 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
 def main():
     name = str()
     form = []
-    st.title("Personalized Song Recommendations")
-    
+     #form = st.form(key='my_form', clear_on_submit=True)
+    form = st.form(key='my_form')
+    name = form.text_input(label='Enter Artist Name')
+    submit_button = form.form_submit_button(label='Submit')
+
+    st.title("Personalized Song Recommendations")    
     st.sidebar.title("Music Recommender App")
     st.sidebar.header("Welcome!")
-    st.sidebar.markdown("Discover your soon-to-be favorite songs by selecting genres and audio features.")
+    if(len(name) > 0):
+        st.sidebar.markdown("Discover your soon-to-be favorite songs by selecting genres and audio features.")
+    else:
+        st.sidebar.markdown("Discover your soon-to-be favorite songs other arists close to your search")
     st.sidebar.markdown("Tips: Play around with different settings and listen to song previews to test the system!")    
     
     # Add buttons to the sidebar
@@ -145,23 +152,18 @@ def main():
         st.sidebar.markdown("[https://hahoangpro.wixsite.com/datascience]")
     if st.sidebar.button("Connect with me on LinkedIn"):
         st.sidebar.markdown("[https://www.linkedin.com/in/ha-hoang-86a80814a/]")
-    #form = st.form(key='my_form', clear_on_submit=True)
-    form = st.form(key='my_form')
-    name = form.text_input(label='Enter Artist Name')
-    submit_button = form.form_submit_button(label='Submit')
-    #print('aaaaa ', name)
+   
+    #print('AAAAAAAAAAA ', name)
     if(len(name) > 0):
         # Load data    
         exploded_track_df, filtered_df = load_data(name)    
-        #print('filtered_df length', len(filtered_df))
         if(len(filtered_df) == 0):
             return 0   
-        call_container(exploded_track_df, filtered_df, name)
+        #call_container(exploded_track_df, filtered_df, name)
     else:
         exploded_track_df, filtered_df = load_data(name)    
-        call_container(exploded_track_df, filtered_df, name)
-
-def call_container(exploded_track_df, filtered_df, name):
+        #call_container(exploded_track_df, filtered_df, name)
+     
     with st.container():
         col1, col2, col3, col4 = st.columns((2,0.5,1,0.5))
         with col3:
