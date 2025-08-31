@@ -24,7 +24,7 @@ def load_data():
     df = pd.concat(li, axis=0, ignore_index=True)
     #count total rows
     row_count = len(df)
-    print(row_count)
+    print('ZZZZZZZ ', row_count)
     #remove duplicates based on uri value
     df = df.drop_duplicates(subset=['uri'], keep='first')
     row_count = len(df)
@@ -164,6 +164,7 @@ def main():
 
     # Add "Recommend More Songs" button
     if st.button("Recommend More Songs"):
+        print('button clicked')
         if st.session_state['start_track_i'] < len(tracks):
             st.session_state['start_track_i'] += tracks_per_page  # Show 6 more songs
             

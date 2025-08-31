@@ -5,7 +5,7 @@ st.set_page_config(page_title="Song Recommendation", layout="wide")
 import glob
 import pandas as pd
 # Declare df in the global scope (optional, but good practice for clarity)
-df = None
+#df = None
 from sklearn.neighbors import NearestNeighbors
 import streamlit.components.v1 as components
 from numpy.random import default_rng as rng
@@ -14,8 +14,7 @@ import numpy as np
 
 # Define function to load & expand data so that each row contains 1 genre of each track
 @st.cache_data()
-## Duplicating read CVS files method. Need to check
-def get_artists():
+def read_data():
     #global df  # Declare df as global within the function
     all_files = glob.glob("csv_data/*.csv")
     list_contact_csv = []
@@ -24,11 +23,14 @@ def get_artists():
         df = pd.read_csv(filename, index_col=None, header=0)
         #add all csv data
         list_contact_csv.append(df) 
-
     df = pd.concat(list_contact_csv, axis=0, ignore_index=True)
-    #count total rows
-    row_count = len(df)
-    #print('AAA ', df)
+
+    return df
+
+## Duplicating read CVS files method. Need to check
+@st.cache_data()
+def get_artists():
+    df = read_data()
     #remove duplicates based on uri value
     df = df.drop_duplicates(subset=['artists_name'], keep='first')
 
@@ -42,21 +44,9 @@ def get_artists():
 @st.cache_data()
 def load_data(name):
     filtered_df = []
-    #global df  # Declare df as global within the function
-    #print('BBB ', df)
-    all_files = glob.glob("csv_data/*.csv")
-    list_contact_csv = []
-    for filename in all_files:
-        df = pd.read_csv(filename, index_col=None, header=0)
-        #add all csv data
-        list_contact_csv.append(df) 
-
-    df = pd.concat(list_contact_csv, axis=0, ignore_index=True)
-    #count total rows
-    row_count = len(df)
-    print(row_count)
-    if df is not None:
-        df = df.drop_duplicates(subset=['uri'], keep='first')
+    df = read_data()
+    #if df is not None:
+    df = df.drop_duplicates(subset=['uri'], keep='first')
     #add new column
     if(len(name) > 0):
         df['artists_name_lower'] = df['artists_name'].str.lower()
@@ -71,6 +61,7 @@ def load_data(name):
     exploded_track_df = df.explode("genres")
 
     return exploded_track_df, filtered_df
+
 
 # Define list of genres and audio features of songs for audience to choose from
 genre_names = ['Dance Pop', 'Electronic', 'Electropop', 'Hip Hop', 'Jazz', 'K-pop', 'Latin', 
@@ -199,6 +190,11 @@ def main():
     #name = form.text_input(label='Enter Artist Name')
     submit_button = form.form_submit_button(label='Submit')
     st.write(f"You selected: {selected_artist}")
+
+    #selected_art = st.selectbox("Choose a artist:", artists_name_new)
+    #if st.button("Get Artists"):
+    #   exploded_track_df, filtered_df = load_dataNew(name)
+    #    print('NNNNNNNN ', selected_art)
 
     st.title("Personalized Song Recommendations")    
     st.sidebar.title("Music Recommender App")
