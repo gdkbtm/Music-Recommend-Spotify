@@ -4,6 +4,8 @@ st.set_page_config(page_title="Song Recommendation", layout="wide")
 
 import glob
 import pandas as pd
+# Declare df in the global scope (optional, but good practice for clarity)
+df = None
 from sklearn.neighbors import NearestNeighbors
 import streamlit.components.v1 as components
 from numpy.random import default_rng as rng
@@ -12,10 +14,12 @@ import numpy as np
 
 # Define function to load & expand data so that each row contains 1 genre of each track
 @st.cache_data()
+## Duplicating read CVS files method. Need to check
 def get_artists():
-    filtered_df = []
+    #global df  # Declare df as global within the function
     all_files = glob.glob("csv_data/*.csv")
     list_contact_csv = []
+    #print('AAA ', df)
     for filename in all_files:
         df = pd.read_csv(filename, index_col=None, header=0)
         #add all csv data
@@ -24,6 +28,7 @@ def get_artists():
     df = pd.concat(list_contact_csv, axis=0, ignore_index=True)
     #count total rows
     row_count = len(df)
+    #print('AAA ', df)
     #remove duplicates based on uri value
     df = df.drop_duplicates(subset=['artists_name'], keep='first')
 
@@ -34,8 +39,11 @@ def get_artists():
 
     return artists_name_new     
 
+@st.cache_data()
 def load_data(name):
     filtered_df = []
+    #global df  # Declare df as global within the function
+    #print('BBB ', df)
     all_files = glob.glob("csv_data/*.csv")
     list_contact_csv = []
     for filename in all_files:
@@ -47,8 +55,8 @@ def load_data(name):
     #count total rows
     row_count = len(df)
     print(row_count)
-    #remove duplicates based on uri value
-    df = df.drop_duplicates(subset=['uri'], keep='first')
+    if df is not None:
+        df = df.drop_duplicates(subset=['uri'], keep='first')
     #add new column
     if(len(name) > 0):
         df['artists_name_lower'] = df['artists_name'].str.lower()
@@ -110,12 +118,34 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
         print('The genre of the given artist: ', genre)
         print('The start year: ', min(filtered_df.release_year))
         print('The end year: ', max(filtered_df.release_year))
+        #test_feat = [acousticness, danceability, energy, instrumentalness, valence, tempo]
+        print('The acousticness: ', min(filtered_df.acousticness))
+        print('The acousticness: ', max(filtered_df.acousticness))
+        print('The danceability: ', min(filtered_df.danceability))
+        print('The danceability: ', max(filtered_df.danceability))
+        print('The energy: ', min(filtered_df.energy))
+        print('The energy: ', max(filtered_df.energy))
+        print('The instrumentalness: ', min(filtered_df.instrumentalness))
+        print('The instrumentalness: ', max(filtered_df.instrumentalness))
+        print('The valence: ', min(filtered_df.valence))
+        print('The valence: ', max(filtered_df.valence))
+        print('The tempo: ', min(filtered_df.tempo))
+        print('The tempo: ', max(filtered_df.tempo))
 
     #print('nnnnn ', filtered_df.release_year)
     if(len(artist_select) == 0):
         genre_data = exploded_track_df[(exploded_track_df["genres"]==genre) & (exploded_track_df["release_year"]>=start_year) & (exploded_track_df["release_year"]<=end_year)]
     else:
         genre_data = exploded_track_df[(exploded_track_df["genres"]==genre) & (exploded_track_df["release_year"]>=min(filtered_df.release_year)) & (exploded_track_df["release_year"]<=max(filtered_df.release_year))]
+        #calculate test_feat from given attributes 
+        #get the max and and min for the artist and get the difference 
+        acousticness = max(filtered_df.acousticness) - min(filtered_df.acousticness)
+        danceability = max(filtered_df.danceability) - min(filtered_df.danceability)
+        energy = max(filtered_df.energy) - min(filtered_df.energy)
+        instrumentalness = max(filtered_df.instrumentalness) - min(filtered_df.instrumentalness)
+        valence = max(filtered_df.valence) - min(filtered_df.valence)
+        tempo = max(filtered_df.tempo) - min(filtered_df.tempo)
+        test_feat = [acousticness, danceability, energy, instrumentalness, valence, tempo]
     #print(len(genre_data))
     genre_data = genre_data.sort_values(by='popularity', ascending=False)[:500] # use only top 500 most popular songs
     
@@ -125,17 +155,17 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
     n_neighbors = neigh.kneighbors([test_feat], n_neighbors=len(genre_data), return_distance=False)[0]
     
     #Search nearest neighbor
+    #artists_name_lower = genre_data.iloc[n_neighbors]['artists_name_lower'].to_numpy()
     artists_id = genre_data.iloc[n_neighbors]['artists_id'].to_numpy()    
     artists_name = genre_data.iloc[n_neighbors]['artists_name'].to_numpy()
     artist_info = [genre_data.iloc[n_neighbors]['artists_id'].to_numpy(), genre_data.iloc[n_neighbors]['artists_name'].to_numpy()]
     uris = genre_data.iloc[n_neighbors]["uri"].tolist()
     audios = genre_data.iloc[n_neighbors][audio_feats].to_numpy()
     print('Artists set before removing the given artist from the list: ', len(artists_id), len(artists_name))
-    #print(artists_name_lower)
 
-    if(len(artist_select) > 0):
-        artists_name_lower = genre_data.iloc[n_neighbors]['artists_name_lower'].to_numpy()
-        indices_to_remove = np.where(artists_name_lower == artist_select)
+    if(len(artist_select) > 0):     
+        indices_to_remove = np.where(artists_name == artist_select)
+        #print(indices_to_remove)
         uris = np.delete(uris, indices_to_remove)
         audios = np.delete(audios, indices_to_remove)
         artists_id = np.delete(artists_id, indices_to_remove)
@@ -154,12 +184,16 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
 
 def main():
     name = str()
+    genre = str() 
+    start_year = str()
+    end_year = str()
     form = []
-   
+    test_feat = []
+    #read_datafiles()
     form = st.form(key='my_form', clear_on_submit=True)
     #form = st.form(key='my_form')
     artists_name_new = get_artists()
-    selected_artist = form.selectbox("Search for a product:", artists_name_new)
+    selected_artist = form.selectbox("Search for an artist:", artists_name_new)
     name = selected_artist;
    
     #name = form.text_input(label='Enter Artist Name')
@@ -177,11 +211,11 @@ def main():
     
     # Add buttons to the sidebar
     if st.sidebar.button("Check out my other projects"):
-        st.sidebar.markdown("[https://hahoangpro.wixsite.com/datascience]")
+        st.sidebar.markdown("[]")
     if st.sidebar.button("Connect with me on LinkedIn"):
-        st.sidebar.markdown("[https://www.linkedin.com/in/ha-hoang-86a80814a/]")
+        st.sidebar.markdown("[https://www.linkedin.com/in/dinesh-karanth-627780a0/]")
    
-    print('AAAAAAAAAAA ', name)
+    #print('AAAAAAAAAAA ', name)
     if(len(name) > 0):
         # Load data    
         exploded_track_df, filtered_df = load_data(name)    
@@ -191,9 +225,9 @@ def main():
     else:
         exploded_track_df, filtered_df = load_data(name)    
         #call_container(exploded_track_df, filtered_df, name)
-     
-    with st.container():
-        col1, col2, col3, col4 = st.columns((2,0.5,1,0.5))
+        
+        with st.container():
+            col1, col2, col3, col4 = st.columns((2,0.5,1,0.5))
         with col3:
             st.markdown("***Select genre:***")
             genre = st.radio(
@@ -211,7 +245,8 @@ def main():
     
     ## Display 6 top songs (closest neighbors) to recommend based on selected features
     tracks_per_page = 9
-    test_feat = [acousticness, danceability, energy, instrumentalness, valence, tempo]
+    if(len(name) == 0):
+        test_feat = [acousticness, danceability, energy, instrumentalness, valence, tempo]
     uris, audios, artists_id, artists_name, artist_info = n_neighbors_uri_audio(exploded_track_df, filtered_df, name, genre, start_year, end_year, test_feat)
 
     #print(artist_info)
