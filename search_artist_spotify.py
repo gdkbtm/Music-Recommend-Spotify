@@ -12,6 +12,28 @@ import numpy as np
 
 # Define function to load & expand data so that each row contains 1 genre of each track
 @st.cache_data()
+def get_artists():
+    filtered_df = []
+    all_files = glob.glob("csv_data/*.csv")
+    list_contact_csv = []
+    for filename in all_files:
+        df = pd.read_csv(filename, index_col=None, header=0)
+        #add all csv data
+        list_contact_csv.append(df) 
+
+    df = pd.concat(list_contact_csv, axis=0, ignore_index=True)
+    #count total rows
+    row_count = len(df)
+    #remove duplicates based on uri value
+    df = df.drop_duplicates(subset=['artists_name'], keep='first')
+
+     # Get unique values from a column for autocomplete options
+    #### unique is not working
+    artists_name_new = df['artists_name'].unique().tolist()
+    artists_name_new[:0] = ['']    
+
+    return artists_name_new     
+
 def load_data(name):
     filtered_df = []
     all_files = glob.glob("csv_data/*.csv")
@@ -133,10 +155,16 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
 def main():
     name = str()
     form = []
-     #form = st.form(key='my_form', clear_on_submit=True)
-    form = st.form(key='my_form')
-    name = form.text_input(label='Enter Artist Name')
+   
+    form = st.form(key='my_form', clear_on_submit=True)
+    #form = st.form(key='my_form')
+    artists_name_new = get_artists()
+    selected_artist = form.selectbox("Search for a product:", artists_name_new)
+    name = selected_artist;
+   
+    #name = form.text_input(label='Enter Artist Name')
     submit_button = form.form_submit_button(label='Submit')
+    st.write(f"You selected: {selected_artist}")
 
     st.title("Personalized Song Recommendations")    
     st.sidebar.title("Music Recommender App")
@@ -153,7 +181,7 @@ def main():
     if st.sidebar.button("Connect with me on LinkedIn"):
         st.sidebar.markdown("[https://www.linkedin.com/in/ha-hoang-86a80814a/]")
    
-    #print('AAAAAAAAAAA ', name)
+    print('AAAAAAAAAAA ', name)
     if(len(name) > 0):
         # Load data    
         exploded_track_df, filtered_df = load_data(name)    
@@ -185,6 +213,7 @@ def main():
     tracks_per_page = 9
     test_feat = [acousticness, danceability, energy, instrumentalness, valence, tempo]
     uris, audios, artists_id, artists_name, artist_info = n_neighbors_uri_audio(exploded_track_df, filtered_df, name, genre, start_year, end_year, test_feat)
+
     #print(artist_info)
     # Use Spotify Developer Widget to display iframe with classic HTML
     tracks = []
