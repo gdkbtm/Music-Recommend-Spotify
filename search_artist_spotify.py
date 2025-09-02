@@ -191,11 +191,6 @@ def main():
     submit_button = form.form_submit_button(label='Submit')
     st.write(f"You selected: {selected_artist}")
 
-    #selected_art = st.selectbox("Choose a artist:", artists_name_new)
-    #if st.button("Get Artists"):
-    #   exploded_track_df, filtered_df = load_dataNew(name)
-    #    print('NNNNNNNN ', selected_art)
-
     st.title("Personalized Song Recommendations")    
     st.sidebar.title("Music Recommender App")
     st.sidebar.header("Welcome!")
