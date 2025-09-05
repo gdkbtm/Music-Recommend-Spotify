@@ -1,4 +1,4 @@
-# Train rain models & test parquet files for music recommendation
+#   
 # run Music-Recommend-Spotify % python predict_music_popularity.py --genre 'pop'
 # run Music-Recommend-Spotify % python predict_music_popularity.py (default genre is rock)
 

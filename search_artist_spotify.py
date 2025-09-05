@@ -137,9 +137,9 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
         valence = max(filtered_df.valence) - min(filtered_df.valence)
         tempo = max(filtered_df.tempo) - min(filtered_df.tempo)
         test_feat = [acousticness, danceability, energy, instrumentalness, valence, tempo]
-    #print(len(genre_data))
+    print(len(genre_data))
     genre_data = genre_data.sort_values(by='popularity', ascending=False)[:500] # use only top 500 most popular songs
-    
+    print(len(genre_data))
     neigh = NearestNeighbors()
     neigh.fit(genre_data[audio_feats].to_numpy())
     
@@ -163,6 +163,7 @@ def n_neighbors_uri_audio(exploded_track_df, filtered_df, artist_select, genre, 
         artists_name = np.delete(artists_name, indices_to_remove)
         artist_info = np.delete(artist_info, indices_to_remove)
         print('After remove the entries from the list: ', len(artists_id), len(artists_name))
+
 
     return uris, audios, artists_id, artists_name, artist_info
 
