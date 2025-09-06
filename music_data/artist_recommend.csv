@@ -1,51 +1,28 @@
 artists_name,name,genres,release_year,popularity
-Muse,Sober,rock,1999.0,44.0
-Skid Row,18 and Life,rock,1998.0,60.0
-Blur,Song 2 - 2012 Remastered Version,rock,1997.0,77.0
-Machine Head,Davidian,rock,1994.0,57.0
-Rage Against The Machine,Take The Power Back,rock,1992.0,60.0
-Suede,The Wild Ones,rock,1994.0,36.0
-Primal Scream,Movin' on Up,rock,1991.0,51.0
-Iron Maiden,Bring Your Daughter...To The Slaughter - 2015 Remaster,rock,1990.0,48.0
-Mr. Big,To Be With You - 2010 Remastered Version,rock,1991.0,73.0
-Manic Street Preachers,A Design for Life - Remastered,rock,1996.0,58.0
-Iron Maiden,Fear of the Dark - 2015 Remaster,rock,1992.0,70.0
-Queens of the Stone Age,Regular John,rock,1998.0,55.0
-John Mayall & The Bluesbreakers,When The Devil Starts Crying,rock,1998.0,30.0
-Duran Duran,The Wild Boys,rock,1998.0,55.0
-311,Beautiful Disaster,rock,1997.0,61.0
-Golden Earring,The Naked Truth - Live,rock,1992.0,20.0
-Radiohead,The Bends,rock,1995.0,56.0
-Silverchair,Freak,rock,1997.0,59.0
-AC/DC,Hard as a Rock,rock,1995.0,62.0
-Candlebox,You,rock,1993.0,57.0
-Radiohead,My Iron Lung,rock,1995.0,58.0
-Sepultura,Roots Bloody Roots,rock,1996.0,61.0
-Pantera,Fucking Hostile,rock,1992.0,58.0
-AC/DC,Are You Ready,rock,1990.0,64.0
-Oasis,Champagne Supernova,rock,1995.0,48.0
-Oasis,Round Are Way (MTV Unplugged),rock,1995.0,40.0
-Living Colour,Love Rears Its Ugly Head,rock,1990.0,52.0
-Pixies,Cecilia Ann,rock,1990.0,43.0
-David Bowie,Hallo Spaceboy,rock,1995.0,34.0
-Tom Petty,You Don't Know How It Feels,rock,1994.0,66.0
-Kenny Loggins,Playing with the Boys,rock,1999.0,54.0
-Bruce Dickinson,Tears of the Dragon - 2001 Remastered Version,rock,1994.0,59.0
-Radiohead,Bullet Proof ... I Wish I Was,rock,1995.0,53.0
-Pink Floyd,High Hopes - 2011 Remastered Version,rock,1994.0,58.0
-Chris Cornell,Seasons,rock,1992.0,56.0
-Spin Doctors,Two Princes,rock,1991.0,73.0
-Oasis,Live Forever - Remastered,rock,1994.0,56.0
-Eric Clapton,Tears In Heaven,rock,1992.0,75.0
-Ozzy Osbourne,Crazy Train,rock,1997.0,60.0
-Rage Against The Machine,Testify,rock,1999.0,68.0
-The Cure,Friday I'm in Love,rock,1992.0,68.0
-Oasis,Stand By Me,rock,1997.0,61.0
-Joni Mitchell,A Case Of You,rock,2000.0,41.0
-Metallica,Enter Sandman,rock,1991.0,74.0
-Damn Yankees,High Enough,rock,1990.0,59.0
-Rage Against The Machine,Guerrilla Radio,rock,1999.0,71.0
-Lou Reed,"Foot of Pride - Live at Madison Square Garden, New York, NY - October 1992",rock,1993.0,27.0
-Suede,The Wild Ones (Remastered),rock,1994.0,47.0
-Garbage,I Think I'm Paranoid,rock,1998.0,59.0
-Faith No More,Ashes to Ashes - 2016 Remastered Version,rock,1997.0,52.0
+Boz Scaggs,What Can I Say,folk,1997.0,62.0
+Joni Mitchell,Both Sides Now,folk,2000.0,61.0
+Bob Dylan,"The Times They Are A-Changin' - Live at Sony Music Studios, New York, NY - November 1994",folk,1995.0,59.0
+Ryan Adams,Come Pick Me Up,folk,2000.0,58.0
+James Taylor,October Road,folk,2000.0,58.0
+Steve Earle,The Galway Girl,folk,2000.0,57.0
+Dusty Springfield,Spooky,folk,1998.0,56.0
+Ryan Adams,Oh My Sweet Carolina,folk,2000.0,55.0
+Todd Rundgren,Hello It's Me,folk,1997.0,47.0
+Simon & Garfunkel,Cecilia,folk,1999.0,47.0
+Joni Mitchell,Urge for Going,folk,1996.0,47.0
+The Hollies,The Air That I Breathe,folk,1993.0,44.0
+Joni Mitchell,I Wish I Were In Love Again,folk,2000.0,43.0
+Joni Mitchell,At Last,folk,2000.0,42.0
+Joni Mitchell,A Case Of You,folk,2000.0,41.0
+Joni Mitchell,Comes Love,folk,2000.0,41.0
+Linda Ronstadt,Frenesi (Frenzy),folk,1992.0,39.0
+Gerry Rafferty,Baker Street - Edit,folk,1998.0,38.0
+Bob Dylan,Dirt Road Blues,folk,1997.0,36.0
+Bob Dylan,The Times They Are A-Changin' - Witmark Demo - 1963,folk,1991.0,36.0
+Joni Mitchell,The Magdalene Laundries,folk,1994.0,33.0
+John Prine,Angel from Montgomery,folk,2000.0,33.0
+Joni Mitchell,Not To Blame,folk,1994.0,31.0
+Bob Dylan,Delia,folk,1993.0,29.0
+Harry Nilsson,"Everybody's Talkin' - From ""Midnight Cowboy""",folk,1995.0,28.0
+Bob Dylan,Frankie & Albert,folk,1992.0,27.0
+Linda Ronstadt,Ta Ta Dios (Father God),folk,1991.0,18.0
